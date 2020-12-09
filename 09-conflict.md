@@ -44,130 +44,134 @@ output:
 
 
  Suppose that Wolfman has added a similar picture in the meantime.
-> > His is a picture of the Martian sky, but it is *also* called `mars.jpg`.
-> > When Dracula tries to push, he gets a familiar message:
-> >
-> > ~~~
-> > $ git push origin master
-> > ~~~
-> > {: .language-bash}
-> >
-> > ~~~
-> > To https://github.com/vlad/planets.git
-> >  ! [rejected]        master -> master (fetch first)
-> > error: failed to push some refs to 'https://github.com/vlad/planets.git'
-> > hint: Updates were rejected because the remote contains work that you do
-> > hint: not have locally. This is usually caused by another repository pushing
-> > hint: to the same ref. You may want to first integrate the remote changes
-> > hint: (e.g., 'git pull ...') before pushing again.
-> > hint: See the 'Note about fast-forwards' in 'git push --help' for details.
-> > ~~~
-> > {: .output}
-> >
-> > We've learned that we must pull first and resolve any conflicts:
-> >
-> > ~~~
-> > $ git pull origin master
-> > ~~~
-> > {: .language-bash}
-> >
-> > When there is a conflict on an image or other binary file, git prints
-> > a message like this:
-> >
-> > ~~~
-> > $ git pull origin master
-> > remote: Counting objects: 3, done.
-> > remote: Compressing objects: 100% (3/3), done.
-> > remote: Total 3 (delta 0), reused 0 (delta 0)
-> > Unpacking objects: 100% (3/3), done.
-> > From https://github.com/vlad/planets.git
-> >  * branch            master     -> FETCH_HEAD
-> >    6a67967..439dc8c  master     -> origin/master
-> > warning: Cannot merge binary files: mars.jpg (HEAD vs. 439dc8c08869c342438f6dc4a2b615b05b93c76e)
-> > Auto-merging mars.jpg
-> > CONFLICT (add/add): Merge conflict in mars.jpg
-> > Automatic merge failed; fix conflicts and then commit the result.
-> > ~~~
-> > {: .output}
-> >
-> > The conflict message here is mostly the same as it was for `mars.txt`, but
-> > there is one key additional line:
-> >
-> > ~~~
-> > warning: Cannot merge binary files: mars.jpg (HEAD vs. 439dc8c08869c342438f6dc4a2b615b05b93c76e)
-> > ~~~
-> >
-> > Git cannot automatically insert conflict markers into an image as it does
-> > for text files. So, instead of editing the image file, we must check out
-> > the version we want to keep. Then we can add and commit this version.
-> >
-> > On the key line above, Git has conveniently given us commit identifiers
-> > for the two versions of `mars.jpg`. Our version is `HEAD`, and Wolfman's
-> > version is `439dc8c0...`. If we want to use our version, we can use
-> > `git checkout`:
-> >
-> > ~~~
-> > $ git checkout HEAD mars.jpg
-> > $ git add mars.jpg
-> > $ git commit -m "Use image of surface instead of sky"
-> > ~~~
-> > {: .language-bash}
-> >
-> > ~~~
-> > [master 21032c3] Use image of surface instead of sky
-> > ~~~
-> > {: .output}
-> >
-> > If instead we want to use Wolfman's version, we can use `git checkout` with
-> > Wolfman's commit identifier, `439dc8c0`:
-> >
-> > ~~~
-> > $ git checkout 439dc8c0 mars.jpg
-> > $ git add mars.jpg
-> > $ git commit -m "Use image of sky instead of surface"
-> > ~~~
-> > {: .language-bash}
-> >
-> > ~~~
-> > [master da21b34] Use image of sky instead of surface
-> > ~~~
-> > {: .output}
-> >
-> > We can also keep *both* images. The catch is that we cannot keep them
-> > under the same name. But, we can check out each version in succession
-> > and *rename* it, then add the renamed versions. First, check out each
-> > image and rename it:
-> >
-> > ~~~
-> > $ git checkout HEAD mars.jpg
-> > $ git mv mars.jpg mars-surface.jpg
-> > $ git checkout 439dc8c0 mars.jpg
-> > $ mv mars.jpg mars-sky.jpg
-> > ~~~
-> > {: .language-bash}
-> >
-> > Then, remove the old `mars.jpg` and add the two new files:
-> >
-> > ~~~
-> > $ git rm mars.jpg
-> > $ git add mars-surface.jpg
-> > $ git add mars-sky.jpg
-> > $ git commit -m "Use two images: surface and sky"
-> > ~~~
-> > {: .language-bash}
-> >
-> > ~~~
-> > [master 94ae08c] Use two images: surface and sky
-> >  2 files changed, 0 insertions(+), 0 deletions(-)
-> >  create mode 100644 mars-sky.jpg
-> >  rename mars.jpg => mars-surface.jpg (100%)
-> > ~~~
-> > {: .output}
-> >
-> > Now both images of Mars are checked into the repository, and `mars.jpg`
-> > no longer exists.
-> {: .solution}
-{: .challenge}
+ His is a picture of the Martian sky, but it is *also* called `mars.jpg`.
+ When Dracula tries to push, he gets a familiar message:
+
+input:
+ ~~~
+ $ git push origin master
+ ~~~
+
+output:
+ ~~~
+ To https://github.com/vlad/planets.git
+  ! [rejected]        master -> master (fetch first)
+ error: failed to push some refs to 'https://github.com/vlad/planets.git'
+ hint: Updates were rejected because the remote contains work that you do
+ hint: not have locally. This is usually caused by another repository pushing
+ hint: to the same ref. You may want to first integrate the remote changes
+ hint: (e.g., 'git pull ...') before pushing again.
+ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+ ~~~
+
+ We've learned that we must pull first and resolve any conflicts:
+
+input:
+ ~~~
+ $ git pull origin master
+ ~~~
+
+ When there is a conflict on an image or other binary file, git prints
+ a message like this:
+
+output:
+ ~~~
+ $ git pull origin master
+ remote: Counting objects: 3, done.
+ remote: Compressing objects: 100% (3/3), done.
+ remote: Total 3 (delta 0), reused 0 (delta 0)
+ Unpacking objects: 100% (3/3), done.
+ From https://github.com/vlad/planets.git
+  * branch            master     -> FETCH_HEAD
+    6a67967..439dc8c  master     -> origin/master
+ warning: Cannot merge binary files: mars.jpg (HEAD vs. 439dc8c08869c342438f6dc4a2b615b05b93c76e)
+ Auto-merging mars.jpg
+ CONFLICT (add/add): Merge conflict in mars.jpg
+ Automatic merge failed; fix conflicts and then commit the result.
+ ~~~
+
+
+ The conflict message here is mostly the same as it was for `mars.txt`, but
+ there is one key additional line:
+
+ ~~~
+ warning: Cannot merge binary files: mars.jpg (HEAD vs. 439dc8c08869c342438f6dc4a2b615b05b93c76e)
+ ~~~
+
+ Git cannot automatically insert conflict markers into an image as it does
+ for text files. So, instead of editing the image file, we must check out
+ the version we want to keep. Then we can add and commit this version.
+
+ On the key line above, Git has conveniently given us commit identifiers
+ for the two versions of `mars.jpg`. Our version is `HEAD`, and Wolfman's
+ version is `439dc8c0...`. If we want to use our version, we can use
+ `git checkout`:
+
+input:
+~~~
+ $ git checkout HEAD mars.jpg
+ $ git add mars.jpg
+ $ git commit -m "Use image of surface instead of sky"
+ ~~~
+
+output:
+ ~~~
+ [master 21032c3] Use image of surface instead of sky
+ ~~~
+
+
+ If instead we want to use Wolfman's version, we can use `git checkout` with
+ Wolfman's commit identifier, `439dc8c0`:
+
+input:
+ ~~~
+ $ git checkout 439dc8c0 mars.jpg
+ $ git add mars.jpg
+ $ git commit -m "Use image of sky instead of surface"
+ ~~~
+
+output:
+ ~~~
+[master da21b34] Use image of sky instead of surface
+ ~~~
+
+
+ We can also keep *both* images. The catch is that we cannot keep them
+ under the same name. But, we can check out each version in succession
+ and *rename* it, then add the renamed versions. First, check out each
+ image and rename it:
+
+ ~~~
+ $ git checkout HEAD mars.jpg
+ $ git mv mars.jpg mars-surface.jpg
+ $ git checkout 439dc8c0 mars.jpg
+ $ mv mars.jpg mars-sky.jpg
+ ~~~
+ {: .language-bash}
+
+ Then, remove the old `mars.jpg` and add the two new files:
+
+input:
+ ~~~
+ $ git rm mars.jpg
+ $ git add mars-surface.jpg
+ $ git add mars-sky.jpg
+ $ git commit -m "Use two images: surface and sky"
+ ~~~
+
+output:
+ ~~~
+ [master 94ae08c] Use two images: surface and sky
+  2 files changed, 0 insertions(+), 0 deletions(-)
+  create mode 100644 mars-sky.jpg
+  rename mars.jpg => mars-surface.jpg (100%)
+ ~~~
+
+
+ Now both images of Mars are checked into the repository, and `mars.jpg`
+ no longer exists.
+
+</details>
 
 > ## 9.2 A Typical Work Session
 >
@@ -197,7 +201,8 @@ output:
 > |5    |                           |                            |
 > |6    | Celebrate!                | `AFK`                      |
 >
-> > ## Solution
+<details>
+<summary>Solution</summary>
 > >
 > > |order|action . . . . . . |command . . . . . . . . . . . . . . . . . . . |
 > > |-----|-------------------|----------------------------------------------|
@@ -208,5 +213,4 @@ output:
 > > |5    | Update remote     | `git push origin master`                     |
 > > |6    | Celebrate!        | `AFK`                                        |
 > >
-> {: .solution}
-{: .challenge}
+</details>
