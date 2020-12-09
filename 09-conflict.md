@@ -1,4 +1,9 @@
 # Conflicts
+
+## Conflicting changes
+![Conflicting Changes](/fig/conflict.svg)
+
+
  ## 9.1 Conflicts on Non-textual files
 
  What does Git do
