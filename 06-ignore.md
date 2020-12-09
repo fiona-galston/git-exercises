@@ -62,7 +62,8 @@ As with most programming issues, there are a few alternative ways that one may e
  Hint: think a bit about how you created an exception with the `!` operator
 before.
 
- ## Solution
+ <details>
+ <summary>Solution</summary>
 
  If you want to ignore the contents of `results/` but not those of `results/data/`, you can change your `.gitignore` to ignore
  the contents of results folder, but create an exception for the contents of the `results/data` subfolder. Your .gitignore would look like this:
@@ -70,73 +71,71 @@ before.
  ~~~
  results/*               # ignore everything in results folder
  !results/data/          # do not ignore results/data/ contents
-> > ~~~
-> > {: .output}
-> >
-> {: .solution}
-{: .challenge}
+ ~~~ 
+</details>
 
-> ## Ignoring all data Files in a Directory
->
-> Assuming you have an empty .gitignore file, and given a directory structure that looks like:
->
-> ~~~
-> results/data/position/gps/a.dat
-> results/data/position/gps/b.dat
-> results/data/position/gps/c.dat
-> results/data/position/gps/info.txt
-> results/plots
-> ~~~
-> {: .language-bash}
->
-> What's the shortest `.gitignore` rule you could write to ignore all `.dat`
-> files in `result/data/position/gps`? Do not ignore the `info.txt`.
->
-> > ## Solution
-> >
-> > Appending `results/data/position/gps/*.dat` will match every file in `results/data/position/gps`
-> > that ends with `.dat`.
-> > The file `results/data/position/gps/info.txt` will not be ignored.
-> {: .solution}
-{: .challenge}
+ ## Ignoring all data Files in a Directory
 
-> ## The Order of Rules
->
-> Given a `.gitignore` file with the following contents:
->
-> ~~~
-> *.dat
-> !*.dat
-> ~~~
-> {: .language-bash}
->
-> What will be the result?
->
-> > ## Solution
-> >
-> > The `!` modifier will negate an entry from a previously defined ignore pattern.
-> > Because the `!*.dat` entry negates all of the previous `.dat` files in the `.gitignore`,
-> > none of them will be ignored, and all `.dat` files will be tracked.
-> >
-> {: .solution}
-{: .challenge}
+Assuming you have an empty .gitignore file, and given a directory structure that looks like:
 
-> ## Log Files
->
-> You wrote a script that creates many intermediate log-files of the form `log_01`, `log_02`, `log_03`, etc.
-> You want to keep them but you do not want to track them through `git`.
->
-> 1. Write **one** `.gitignore` entry that excludes files of the form `log_01`, `log_02`, etc.
->
-> 2. Test your "ignore pattern" by creating some dummy files of the form `log_01`, etc.
->
-> 3. You find that the file `log_01` is very important after all, add it to the tracked files without changing the `.gitignore` again.
->
-> 4. Discuss with your neighbor what other types of files could reside in your directory that you do not want to track and thus would exclude via `.gitignore`.
->
-> > ## Solution
-> >
-> > 1. append either `log_*`  or  `log*`  as a new entry in your .gitignore
-> > 3. track `log_01` using   `git add -f log_01`
-> {: .solution}
-{: .challenge}
+ ~~~
+ results/data/position/gps/a.dat
+ results/data/position/gps/b.dat
+ results/data/position/gps/c.dat
+ results/data/position/gps/info.txt
+ results/plots
+ ~~~
+
+
+
+ What's the shortest `.gitignore` rule you could write to ignore all `.dat`
+ files in `result/data/position/gps`? Do not ignore the `info.txt`.
+
+<details>
+<summary>Solution</summary>
+
+ Appending `results/data/position/gps/*.dat` will match every file in `results/data/position/gps`
+ that ends with `.dat`.
+ The file `results/data/position/gps/info.txt` will not be ignored.
+</details>
+
+ ## The Order of Rules
+
+ Given a `.gitignore` file with the following contents:
+
+ ~~~
+ *.dat
+ !*.dat
+ ~~~
+
+
+ What will be the result?
+
+<details>
+<summary>Solution</summary>
+
+ The `!` modifier will negate an entry from a previously defined ignore pattern.
+ Because the `!*.dat` entry negates all of the previous `.dat` files in the `.gitignore`,
+ none of them will be ignored, and all `.dat` files will be tracked.
+
+</details>
+
+ ## Log Files
+ 
+ You wrote a script that creates many intermediate log-files of the form `log_01`, `log_02`, `log_03`, etc.
+ You want to keep them but you do not want to track them through `git`.
+
+ 1. Write **one** `.gitignore` entry that excludes files of the form `log_01`, `log_02`, etc.
+
+ 2. Test your "ignore pattern" by creating some dummy files of the form `log_01`, etc.
+
+ 3. You find that the file `log_01` is very important after all, add it to the tracked files without changing the `.gitignore` again.
+
+ 4. Discuss with your neighbor what other types of files could reside in your directory that you do not want to track and thus would exclude via `.gitignore`.
+
+<details>
+ <summary>Solution</summary>
+
+ 1. append either `log_*`  or  `log*`  as a new entry in your .gitignore
+ 3. track `log_01` using   `git add -f log_01`
+</details>
